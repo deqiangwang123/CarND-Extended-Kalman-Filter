@@ -17,29 +17,34 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
     VectorXd rmse(4);
     rmse << 0,0,0,0;
 
-    if(estimations.size() == 0){
-      cout << "ERROR - CalculateRMSE () - The estimations vector is empty" << endl;
-      return rmse;
-    }
+   //  if(estimations.size() == 0){
+   //    cout << "ERROR - CalculateRMSE () - The estimations vector is empty" << endl;
+   //    return rmse;
+   //  }
 
-    if(ground_truth.size() == 0){
-      cout << "ERROR - CalculateRMSE () - The ground-truth vector is empty" << endl;
-      return rmse;
-    }
+   //  if(ground_truth.size() == 0){
+   //    cout << "ERROR - CalculateRMSE () - The ground-truth vector is empty" << endl;
+   //    return rmse;
+   //  }
 
-    unsigned int n = estimations.size();
-    if(n != ground_truth.size()){
-      cout << "ERROR - CalculateRMSE () - The ground-truth and estimations vectors must have the same size." << endl;
+   //  unsigned int n = estimations.size();
+
+   // accumulate squared residuals
+    if(estimations.size() != ground_truth.size()){
+      cout << "Invalid estimation or ground_truth data" << endl;
       return rmse;
     }
 
     for(unsigned int i=0; i < estimations.size(); ++i){
-      VectorXd diff = estimations[i] - ground_truth[i];
-      diff = diff.array()*diff.array();
-      rmse += diff;
+      VectorXd residual = estimations[i] - ground_truth[i];
+      
+      // coefficient-wise multiplication
+      residual = residual.array()*residual.array();
+      rmse += residual;
     }
-
-    rmse = rmse / n;
+    // calculate the mean
+    rmse = rmse / estimations.size();
+    // calculate the squared root
     rmse = rmse.array().sqrt();
     return rmse;  
 }
