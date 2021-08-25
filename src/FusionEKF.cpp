@@ -37,6 +37,7 @@ FusionEKF::FusionEKF() {
      * TODO: Set the process and measurement noises
      */
     // Initializing P
+
     ekf_.P_ = MatrixXd(4, 4);
     ekf_.P_ << 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -81,13 +82,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
             float rho_dot = measurement_pack.raw_measurements_[2]; // velocity of rho
             // Coordinates convertion from polar to cartesian
             float px = rho * cos(phi);
-            if ( px < 0.0001 ) {
-                px = 0.0001;
-            }
+            // if ( px < 0.0001 ) {
+            //     px = 0.0001;
+            // }
             float py = rho * sin(phi);
-            if ( py < 0.0001 ) {
-                py = 0.0001;
-            }
+            // if ( py < 0.0001 ) {
+            //     py = 0.0001;
+            // }
             float vx = rho_dot * cos(phi);
             float vy = rho_dot * sin(phi);
             ekf_.P_ <<  1, 0, 0, 0,
@@ -138,14 +139,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     // Noise covariance matrix computation
     // Noise values from the task
-    float noise_ax = 9.0;
-    float noise_ay = 9.0;
+    double noise_ax = 9.0;
+    double noise_ay = 9.0;
 
-    float dt_2 = dt * dt; //dt^2
-    float dt_3 = dt_2 * dt; //dt^3
-    float dt_4 = dt_3 * dt; //dt^4
-    float dt_4_4 = dt_4 / 4; //dt^4/4
-    float dt_3_2 = dt_3 / 2; //dt^3/2
+    double dt_2 = dt * dt; //dt^2
+    double dt_3 = dt_2 * dt; //dt^3
+    double dt_4 = dt_3 * dt; //dt^4
+    double dt_4_4 = dt_4 / 4; //dt^4/4
+    double dt_3_2 = dt_3 / 2; //dt^3/2
     ekf_.Q_ = MatrixXd(4, 4);
     ekf_.Q_ << dt_4_4 * noise_ax, 0, dt_3_2 * noise_ax, 0,
                 0, dt_4_4 * noise_ay, 0, dt_3_2 * noise_ay,
